@@ -16,8 +16,6 @@
 #include "../../general/forall.hpp"
 #include "../../linalg/dtensor.hpp"
 
-using namespace std;
-
 // Piola transformation in H(curl): w = dF^{-T} \hat{w}
 // curl w = (1 / det (dF)) dF \hat{curl} \hat{w}
 

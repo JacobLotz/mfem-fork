@@ -16,8 +16,6 @@
 #include "../../general/forall.hpp"
 #include "../../linalg/dtensor.hpp"
 
-using namespace std;
-
 namespace mfem
 {
 

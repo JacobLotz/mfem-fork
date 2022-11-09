@@ -16,11 +16,6 @@
 #include "../../general/forall.hpp"
 #include "../../linalg/dtensor.hpp"
 
-using namespace std;
-
-// Piola transformation in H(div): w = (1 / det (dF)) dF \hat{w}
-// div w = (1 / det (dF)) \hat{div} \hat{w}
-
 namespace mfem
 {
 

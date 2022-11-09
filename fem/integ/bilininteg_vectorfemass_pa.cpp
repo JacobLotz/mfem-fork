@@ -148,25 +148,35 @@ void VectorFEMassIntegrator::AssembleDiagonalPA(Vector& diag)
             const int ID = (dofs1D << 4) | quad1D;
             switch (ID)
             {
-               case 0x23: return internal::SmemPAHcurlMassAssembleDiagonal3D<2,3>(dofs1D,
-                                                                                     quad1D, ne,
-                                                                                     symmetric,
-                                                                                     mapsO->B, mapsC->B, pa_data, diag);
-               case 0x34: return internal::SmemPAHcurlMassAssembleDiagonal3D<3,4>(dofs1D,
-                                                                                     quad1D, ne,
-                                                                                     symmetric,
-                                                                                     mapsO->B, mapsC->B, pa_data, diag);
-               case 0x45: return internal::SmemPAHcurlMassAssembleDiagonal3D<4,5>(dofs1D,
-                                                                                     quad1D, ne,
-                                                                                     symmetric,
-                                                                                     mapsO->B, mapsC->B, pa_data, diag);
-               case 0x56: return internal::SmemPAHcurlMassAssembleDiagonal3D<5,6>(dofs1D,
-                                                                                     quad1D, ne,
-                                                                                     symmetric,
-                                                                                     mapsO->B, mapsC->B, pa_data, diag);
-               default: return internal::SmemPAHcurlMassAssembleDiagonal3D(dofs1D, quad1D, ne,
-                                                                              symmetric,
-                                                                              mapsO->B, mapsC->B, pa_data, diag);
+               case 0x23:
+                  return internal::SmemPAHcurlMassAssembleDiagonal3D<2,3>(
+                            dofs1D,
+                            quad1D, ne,
+                            symmetric,
+                            mapsO->B, mapsC->B, pa_data, diag);
+               case 0x34:
+                  return internal::SmemPAHcurlMassAssembleDiagonal3D<3,4>(
+                            dofs1D,
+                            quad1D, ne,
+                            symmetric,
+                            mapsO->B, mapsC->B, pa_data, diag);
+               case 0x45:
+                  return internal::SmemPAHcurlMassAssembleDiagonal3D<4,5>(
+                            dofs1D,
+                            quad1D, ne,
+                            symmetric,
+                            mapsO->B, mapsC->B, pa_data, diag);
+               case 0x56:
+                  return internal::SmemPAHcurlMassAssembleDiagonal3D<5,6>(
+                            dofs1D,
+                            quad1D, ne,
+                            symmetric,
+                            mapsO->B, mapsC->B, pa_data, diag);
+               default:
+                  return internal::SmemPAHcurlMassAssembleDiagonal3D(
+                            dofs1D, quad1D, ne,
+                            symmetric,
+                            mapsO->B, mapsC->B, pa_data, diag);
             }
          }
          else
@@ -220,30 +230,40 @@ void VectorFEMassIntegrator::AddMultPA(const Vector &x, Vector &y) const
             const int ID = (dofs1D << 4) | quad1D;
             switch (ID)
             {
-               case 0x23: return internal::SmemPAHcurlMassApply3D<2,3>(dofs1D, quad1D, ne,
-                                                                          symmetric,
-                                                                          mapsO->B,
-                                                                          mapsC->B, mapsO->Bt,
-                                                                          mapsC->Bt, pa_data, x, y);
-               case 0x34: return internal::SmemPAHcurlMassApply3D<3,4>(dofs1D, quad1D, ne,
-                                                                          symmetric,
-                                                                          mapsO->B,
-                                                                          mapsC->B, mapsO->Bt,
-                                                                          mapsC->Bt, pa_data, x, y);
-               case 0x45: return internal::SmemPAHcurlMassApply3D<4,5>(dofs1D, quad1D, ne,
-                                                                          symmetric,
-                                                                          mapsO->B,
-                                                                          mapsC->B, mapsO->Bt,
-                                                                          mapsC->Bt, pa_data, x, y);
-               case 0x56: return internal::SmemPAHcurlMassApply3D<5,6>(dofs1D, quad1D, ne,
-                                                                          symmetric,
-                                                                          mapsO->B,
-                                                                          mapsC->B, mapsO->Bt,
-                                                                          mapsC->Bt, pa_data, x, y);
-               default: return internal::SmemPAHcurlMassApply3D(dofs1D, quad1D, ne, symmetric,
-                                                                   mapsO->B,
-                                                                   mapsC->B,
-                                                                   mapsO->Bt, mapsC->Bt, pa_data, x, y);
+               case 0x23:
+                  return internal::SmemPAHcurlMassApply3D<2,3>(
+                            dofs1D, quad1D, ne,
+                            symmetric,
+                            mapsO->B,
+                            mapsC->B, mapsO->Bt,
+                            mapsC->Bt, pa_data, x, y);
+               case 0x34:
+                  return internal::SmemPAHcurlMassApply3D<3,4>(
+                            dofs1D, quad1D, ne,
+                            symmetric,
+                            mapsO->B,
+                            mapsC->B, mapsO->Bt,
+                            mapsC->Bt, pa_data, x, y);
+               case 0x45:
+                  return internal::SmemPAHcurlMassApply3D<4,5>(
+                            dofs1D, quad1D, ne,
+                            symmetric,
+                            mapsO->B,
+                            mapsC->B, mapsO->Bt,
+                            mapsC->Bt, pa_data, x, y);
+               case 0x56:
+                  return internal::SmemPAHcurlMassApply3D<5,6>(
+                            dofs1D, quad1D, ne,
+                            symmetric,
+                            mapsO->B,
+                            mapsC->B, mapsO->Bt,
+                            mapsC->Bt, pa_data, x, y);
+               default:
+                  return internal::SmemPAHcurlMassApply3D(
+                            dofs1D, quad1D, ne, symmetric,
+                            mapsO->B,
+                            mapsC->B,
+                            mapsO->Bt, mapsC->Bt, pa_data, x, y);
             }
          }
          else

@@ -918,21 +918,31 @@ void MixedVectorCurlIntegrator::AddMultPA(const Vector &x, Vector &y) const
          const int ID = (dofs1D << 4) | quad1D;
          switch (ID)
          {
-            case 0x23: return internal::SmemPAHcurlL2Apply3D<2,3>(dofs1D, quad1D, ndata, ne,
-                                                                     mapsO->B, mapsC->B,
-                                                                     mapsC->G, pa_data, x, y);
-            case 0x34: return internal::SmemPAHcurlL2Apply3D<3,4>(dofs1D, quad1D, ndata, ne,
-                                                                     mapsO->B, mapsC->B,
-                                                                     mapsC->G, pa_data, x, y);
-            case 0x45: return internal::SmemPAHcurlL2Apply3D<4,5>(dofs1D, quad1D, ndata, ne,
-                                                                     mapsO->B, mapsC->B,
-                                                                     mapsC->G, pa_data, x, y);
-            case 0x56: return internal::SmemPAHcurlL2Apply3D<5,6>(dofs1D, quad1D, ndata, ne,
-                                                                     mapsO->B, mapsC->B,
-                                                                     mapsC->G, pa_data, x, y);
-            default: return internal::SmemPAHcurlL2Apply3D(dofs1D, quad1D, ndata, ne,
-                                                              mapsO->B, mapsC->B, mapsC->G,
-                                                              pa_data, x, y);
+            case 0x23:
+               return internal::SmemPAHcurlL2Apply3D<2,3>(
+                         dofs1D, quad1D, ndata, ne,
+                         mapsO->B, mapsC->B,
+                         mapsC->G, pa_data, x, y);
+            case 0x34:
+               return internal::SmemPAHcurlL2Apply3D<3,4>(
+                         dofs1D, quad1D, ndata, ne,
+                         mapsO->B, mapsC->B,
+                         mapsC->G, pa_data, x, y);
+            case 0x45:
+               return internal::SmemPAHcurlL2Apply3D<4,5>(
+                         dofs1D, quad1D, ndata, ne,
+                         mapsO->B, mapsC->B,
+                         mapsC->G, pa_data, x, y);
+            case 0x56:
+               return internal::SmemPAHcurlL2Apply3D<5,6>(
+                         dofs1D, quad1D, ndata, ne,
+                         mapsO->B, mapsC->B,
+                         mapsC->G, pa_data, x, y);
+            default:
+               return internal::SmemPAHcurlL2Apply3D(
+                         dofs1D, quad1D, ndata, ne,
+                         mapsO->B, mapsC->B, mapsC->G,
+                         pa_data, x, y);
          }
       }
       else
@@ -1057,26 +1067,36 @@ void MixedVectorWeakCurlIntegrator::AddMultPA(const Vector &x, Vector &y) const
          const int ID = (dofs1D << 4) | quad1D;
          switch (ID)
          {
-            case 0x23: return internal::SmemPAHcurlL2Apply3DTranspose<2,3>(dofs1D, quad1D,
-                                                                              ndata,
-                                                                              ne, mapsO->B, mapsC->B,
-                                                                              mapsC->G, pa_data, x, y);
-            case 0x34: return internal::SmemPAHcurlL2Apply3DTranspose<3,4>(dofs1D, quad1D,
-                                                                              ndata,
-                                                                              ne, mapsO->B, mapsC->B,
-                                                                              mapsC->G, pa_data, x, y);
-            case 0x45: return internal::SmemPAHcurlL2Apply3DTranspose<4,5>(dofs1D, quad1D,
-                                                                              ndata,
-                                                                              ne, mapsO->B, mapsC->B,
-                                                                              mapsC->G, pa_data, x, y);
-            case 0x56: return internal::SmemPAHcurlL2Apply3DTranspose<5,6>(dofs1D, quad1D,
-                                                                              ndata,
-                                                                              ne, mapsO->B, mapsC->B,
-                                                                              mapsC->G, pa_data, x, y);
-            default: return internal::SmemPAHcurlL2Apply3DTranspose(dofs1D, quad1D, ndata,
-                                                                       ne,
-                                                                       mapsO->B, mapsC->B,
-                                                                       mapsC->G, pa_data, x, y);
+            case 0x23:
+               return internal::SmemPAHcurlL2Apply3DTranspose<2,3>(
+                         dofs1D, quad1D,
+                         ndata,
+                         ne, mapsO->B, mapsC->B,
+                         mapsC->G, pa_data, x, y);
+            case 0x34:
+               return internal::SmemPAHcurlL2Apply3DTranspose<3,4>(
+                         dofs1D, quad1D,
+                         ndata,
+                         ne, mapsO->B, mapsC->B,
+                         mapsC->G, pa_data, x, y);
+            case 0x45:
+               return internal::SmemPAHcurlL2Apply3DTranspose<4,5>(
+                         dofs1D, quad1D,
+                         ndata,
+                         ne, mapsO->B, mapsC->B,
+                         mapsC->G, pa_data, x, y);
+            case 0x56:
+               return internal::SmemPAHcurlL2Apply3DTranspose<5,6>(
+                         dofs1D, quad1D,
+                         ndata,
+                         ne, mapsO->B, mapsC->B,
+                         mapsC->G, pa_data, x, y);
+            default:
+               return internal::SmemPAHcurlL2Apply3DTranspose(
+                         dofs1D, quad1D, ndata,
+                         ne,
+                         mapsO->B, mapsC->B,
+                         mapsC->G, pa_data, x, y);
          }
       }
       else

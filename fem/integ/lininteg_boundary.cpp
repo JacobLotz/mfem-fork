@@ -12,6 +12,8 @@
 #include "../../general/forall.hpp"
 #include "../../fem/kernels.hpp"
 #include "../lininteg.hpp"
+#include "../gridfunc.hpp"
+#include "../qfunction.hpp"
 
 namespace mfem
 {
