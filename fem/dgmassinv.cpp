@@ -9,10 +9,10 @@
 // terms of the BSD-3 license. We welcome feedback and contributions, see file
 // CONTRIBUTING.md for details.
 
+#include "../general/forall.hpp"
 #include "dgmassinv.hpp"
 #include "bilinearform.hpp"
 #include "dgmassinv_kernels.hpp"
-#include "../general/forall.hpp"
 
 namespace mfem
 {
