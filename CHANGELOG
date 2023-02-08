@@ -45,6 +45,8 @@ Integrations, testing and documentation
 - The following integrations have updated minimum version requirements:
   * RAJA >= 2022.10.3
 
+- Added HIP support to the SUNDIALS interface.
+
 Miscellaneous
 -------------
 - VisItDataCollection now correctly handles collection names containing
