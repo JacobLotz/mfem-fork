@@ -86,12 +86,15 @@ void VectorFEMassIntegrator::AssemblePA(const FiniteElementSpace &trial_fes,
    symmetric = (coeff_dim != dim*dim);
 
    if ((trial_curl && test_div) || (trial_div && test_curl))
+   {
       pa_data.SetSize((coeff_dim == 1 ? 1 : dim*dim) * nq * ne,
                       Device::GetMemoryType());
+   }
    else
+   {
       pa_data.SetSize((symmetric ? symmDims : dims*dims) * nq * ne,
                       Device::GetMemoryType());
-
+   }
    if (trial_curl && test_curl && dim == 3)
    {
       internal::PADiffusionSetup3D(quad1D, coeff_dim, ne, ir->GetWeights(), geom->J,

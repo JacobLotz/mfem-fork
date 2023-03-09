@@ -901,7 +901,6 @@ void PACurlCurlSetup3D(const int Q1D,
             const double Y21 = c_detJ * (J12*R11 + J22*R21 + J32*R31);
             const double Y22 = c_detJ * (J12*R12 + J22*R22 + J32*R32);
             const double Y23 = c_detJ * (J12*R13 + J22*R23 + J32*R33);
-
             const double Y33 = c_detJ * (J13*R13 + J23*R23 + J33*R33);
 
             y(q,3,e) = symmetric ? Y22 : Y21; // 2,2 or 2,1

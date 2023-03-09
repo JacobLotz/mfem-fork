@@ -500,7 +500,7 @@ static void PAHcurlApplyGradient3D(const int c_dofs1D,
    });
 }
 
-// Specialization of PAHcurlApplyGradient3D to the case where
+// Specialization of PAHcurlApplyGradient3D to the case where B is identity
 static void PAHcurlApplyGradient3DBId(const int c_dofs1D,
                                       const int o_dofs1D,
                                       const int NE,
@@ -854,6 +854,7 @@ static void PAHcurlApplyGradientTranspose3D(
 }
 
 // Specialization of PAHcurlApplyGradientTranspose3D to the case where
+// B is identity
 static void PAHcurlApplyGradientTranspose3DBId(
    const int c_dofs1D, const int o_dofs1D, const int NE,
    const Array<double> &G_,
