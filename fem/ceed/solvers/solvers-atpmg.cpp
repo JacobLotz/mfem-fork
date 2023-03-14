@@ -11,15 +11,13 @@
 
 #include "solvers-atpmg.hpp"
 
-#include "../interface/ceed.hpp"
+#include <math.h>
 #include "../interface/util.hpp"
-
 #ifdef MFEM_USE_CEED
 #include <ceed/backend.h>
+#endif
 
-#include <math.h>
-// todo: should probably use Ceed memory wrappers instead of calloc/free?
-#include <stdlib.h>
+#ifdef MFEM_USE_CEED
 
 namespace mfem
 {

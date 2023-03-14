@@ -21,30 +21,21 @@ namespace mfem
 
 void VectorDiffusionIntegrator::AssembleMF(const FiniteElementSpace &fes)
 {
-   // Assumes tensor-product elements
    Mesh *mesh = fes.GetMesh();
    if (mesh->GetNE() == 0) { return; }
-   const FiniteElement &el = *fes.GetFE(0);
-   const IntegrationRule *ir
-      = IntRule ? IntRule : &DiffusionIntegrator::GetRule(el, el);
    if (DeviceCanUseCeed())
    {
       delete ceedOp;
-      MFEM_VERIFY(!VQ && !MQ,
-                  "Only scalar coefficient supported for DiffusionIntegrator"
-                  " with libCEED");
-      const bool mixed = mesh->GetNumGeometries(mesh->Dimension()) > 1 ||
-                         fes.IsVariableOrder();
-      if (mixed)
-      {
-         ceedOp = new ceed::MixedMFDiffusionIntegrator(*this, fes, Q);
-      }
-      else
-      {
-         ceedOp = new ceed::MFDiffusionIntegrator(fes, *ir, Q);
-      }
+      if (MQ) { ceedOp = new ceed::PADiffusionIntegrator(*this, fes, MQ); }
+      else if (VQ) { ceedOp = new ceed::PADiffusionIntegrator(*this, fes, VQ); }
+      else { ceedOp = new ceed::PADiffusionIntegrator(*this, fes, Q); }
       return;
    }
+
+   // Assumes tensor-product elements
+   // const FiniteElement &el = *fes.GetFE(0);
+   // const IntegrationRule *ir
+   //    = IntRule ? IntRule : &DiffusionIntegrator::GetRule(el, el);
    MFEM_ABORT("Error: VectorDiffusionIntegrator::AssembleMF only implemented"
               " with libCEED");
 }

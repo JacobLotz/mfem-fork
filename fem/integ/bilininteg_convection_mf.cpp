@@ -21,27 +21,19 @@ namespace mfem
 
 void ConvectionIntegrator::AssembleMF(const FiniteElementSpace &fes)
 {
-   // Assuming the same element type
    Mesh *mesh = fes.GetMesh();
    if (mesh->GetNE() == 0) { return; }
-   const FiniteElement &el = *fes.GetFE(0);
-   ElementTransformation &Trans = *fes.GetElementTransformation(0);
-   const IntegrationRule *ir = IntRule ? IntRule : &GetRule(el, Trans);
    if (DeviceCanUseCeed())
    {
       delete ceedOp;
-      const bool mixed = mesh->GetNumGeometries(mesh->Dimension()) > 1 ||
-                         fes.IsVariableOrder();
-      if (mixed)
-      {
-         ceedOp = new ceed::MixedMFConvectionIntegrator(*this, fes, Q, alpha);
-      }
-      else
-      {
-         ceedOp = new ceed::MFConvectionIntegrator(fes, *ir, Q, alpha);
-      }
+      ceedOp = new ceed::MFConvectionIntegrator(*this, fes, Q, alpha);
       return;
    }
+
+   // Assuming the same element type
+   // const FiniteElement &el = *fes.GetFE(0);
+   // ElementTransformation &Trans = *fes.GetElementTransformation(0);
+   // const IntegrationRule *ir = IntRule ? IntRule : &GetRule(el, el, Trans);
    MFEM_ABORT("Error: ConvectionIntegrator::AssembleMF only implemented with"
               " libCEED");
 }

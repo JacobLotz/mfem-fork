@@ -24,30 +24,20 @@ void DiffusionIntegrator::AssemblePA(const FiniteElementSpace &fes)
 {
    const MemoryType mt = (pa_mt == MemoryType::DEFAULT) ?
                          Device::GetDeviceMemoryType() : pa_mt;
-   // Assuming the same element type
-   fespace = &fes;
    Mesh *mesh = fes.GetMesh();
    if (mesh->GetNE() == 0) { return; }
-   const FiniteElement &el = *fes.GetFE(0);
-   const IntegrationRule *ir = IntRule ? IntRule : &GetRule(el, el);
    if (DeviceCanUseCeed())
    {
       delete ceedOp;
-      MFEM_VERIFY(!VQ && !MQ,
-                  "Only scalar coefficient supported for DiffusionIntegrator"
-                  " with libCEED");
-      const bool mixed = mesh->GetNumGeometries(mesh->Dimension()) > 1 ||
-                         fes.IsVariableOrder();
-      if (mixed)
-      {
-         ceedOp = new ceed::MixedPADiffusionIntegrator(*this, fes, Q);
-      }
-      else
-      {
-         ceedOp = new ceed::PADiffusionIntegrator(fes, *ir, Q);
-      }
+      if (MQ) { ceedOp = new ceed::PADiffusionIntegrator(*this, fes, MQ); }
+      else if (VQ) { ceedOp = new ceed::PADiffusionIntegrator(*this, fes, VQ); }
+      else { ceedOp = new ceed::PADiffusionIntegrator(*this, fes, Q); }
       return;
    }
+
+   // Assuming the same element type
+   const FiniteElement &el = *fes.GetFE(0);
+   const IntegrationRule *ir = IntRule ? IntRule : &GetRule(el, el);
    const int dims = el.GetDim();
    const int symmDims = (dims * (dims + 1)) / 2; // 1x1: 1, 2x2: 3, 3x3: 6
    const int nq = ir->GetNPoints();
@@ -113,7 +103,6 @@ void DiffusionIntegrator::AssembleDiagonalPA(Vector &diag)
    }
    else
    {
-      if (pa_data.Size()==0) { AssemblePA(*fespace); }
       internal::PADiffusionAssembleDiagonal(dim, dofs1D, quad1D, ne, symmetric,
                                             maps->B, maps->G, pa_data, diag);
    }

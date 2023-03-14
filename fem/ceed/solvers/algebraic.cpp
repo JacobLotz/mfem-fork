@@ -11,14 +11,17 @@
 
 #include "algebraic.hpp"
 
+#include "../../../general/forall.hpp"
 #include "../../bilinearform.hpp"
 #include "../../fespace.hpp"
 #include "../../pfespace.hpp"
-#include "../../../general/forall.hpp"
-#include "solvers-atpmg.hpp"
-#include "full-assembly.hpp"
 #include "../interface/restriction.hpp"
-#include "../interface/ceed.hpp"
+#include "../interface/util.hpp"
+#include "full-assembly.hpp"
+#include "solvers-atpmg.hpp"
+#ifdef MFEM_USE_CEED
+#include <ceed/backend.h>
+#endif
 
 namespace mfem
 {
@@ -638,7 +641,7 @@ AlgebraicSpaceHierarchy::AlgebraicSpaceHierarchy(FiniteElementSpace &fes)
    current_order = order;
 
    Ceed ceed = internal::ceed;
-   InitRestriction(fes, ceed, &fine_er);
+   InitRestriction(fes, false, ceed, &fine_er);
    CeedElemRestriction er = fine_er;
 
    int dim = fes.GetMesh()->Dimension();

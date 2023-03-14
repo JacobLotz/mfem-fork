@@ -1378,26 +1378,19 @@ void ConvectionIntegrator::AssemblePA(const FiniteElementSpace &fes)
 {
    const MemoryType mt = (pa_mt == MemoryType::DEFAULT) ?
                          Device::GetDeviceMemoryType() : pa_mt;
-   // Assumes tensor-product elements
    Mesh *mesh = fes.GetMesh();
-   const FiniteElement &el = *fes.GetFE(0);
-   ElementTransformation &Trans = *fes.GetElementTransformation(0);
-   const IntegrationRule *ir = IntRule ? IntRule : &GetRule(el, Trans);
+   if (mesh->GetNE() == 0) { return; }
    if (DeviceCanUseCeed())
    {
       delete ceedOp;
-      const bool mixed = mesh->GetNumGeometries(mesh->Dimension()) > 1 ||
-                         fes.IsVariableOrder();
-      if (mixed)
-      {
-         ceedOp = new ceed::MixedPAConvectionIntegrator(*this, fes, Q, alpha);
-      }
-      else
-      {
-         ceedOp = new ceed::PAConvectionIntegrator(fes, *ir, Q, alpha);
-      }
+      ceedOp = new ceed::PAConvectionIntegrator(*this, fes, Q, alpha);
       return;
    }
+
+   // Assumes tensor-product elements
+   const FiniteElement &el = *fes.GetFE(0);
+   ElementTransformation &Trans = *fes.GetElementTransformation(0);
+   const IntegrationRule *ir = IntRule ? IntRule : &GetRule(el, el, Trans);
    const int dims = el.GetDim();
    const int symmDims = dims;
    nq = ir->GetNPoints();

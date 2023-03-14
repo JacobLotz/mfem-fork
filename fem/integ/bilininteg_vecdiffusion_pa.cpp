@@ -38,7 +38,6 @@ static void PAVectorDiffusionSetup2D(const int Q1D,
    const auto C = const_c ? Reshape(c.Read(), 1,1) :
                   Reshape(c.Read(), NQ, NE);
 
-
    MFEM_FORALL(e, NE,
    {
       for (int q = 0; q < NQ; ++q)
@@ -73,7 +72,6 @@ static void PAVectorDiffusionSetup3D(const int Q1D,
    const bool const_c = c.Size() == 1;
    const auto C = const_c ? Reshape(c.Read(), 1,1) :
                   Reshape(c.Read(), NQ,NE);
-
 
    MFEM_FORALL(e, NE,
    {
@@ -140,26 +138,21 @@ static void PAVectorDiffusionSetup(const int dim,
 
 void VectorDiffusionIntegrator::AssemblePA(const FiniteElementSpace &fes)
 {
-   // Assumes tensor-product elements
    Mesh *mesh = fes.GetMesh();
-   const FiniteElement &el = *fes.GetFE(0);
-   const IntegrationRule *ir
-      = IntRule ? IntRule : &DiffusionIntegrator::GetRule(el, el);
+   if (mesh->GetNE() == 0) { return; }
    if (DeviceCanUseCeed())
    {
       delete ceedOp;
-      const bool mixed = mesh->GetNumGeometries(mesh->Dimension()) > 1 ||
-                         fes.IsVariableOrder();
-      if (mixed)
-      {
-         ceedOp = new ceed::MixedPADiffusionIntegrator(*this, fes, Q);
-      }
-      else
-      {
-         ceedOp = new ceed::PADiffusionIntegrator(fes, *ir, Q);
-      }
+      if (MQ) { ceedOp = new ceed::PADiffusionIntegrator(*this, fes, MQ); }
+      else if (VQ) { ceedOp = new ceed::PADiffusionIntegrator(*this, fes, VQ); }
+      else { ceedOp = new ceed::PADiffusionIntegrator(*this, fes, Q); }
       return;
    }
+
+   // Assumes tensor-product elements
+   const FiniteElement &el = *fes.GetFE(0);
+   const IntegrationRule *ir
+      = IntRule ? IntRule : &DiffusionIntegrator::GetRule(el, el);
    const int dims = el.GetDim();
    const int symmDims = (dims * (dims + 1)) / 2; // 1x1: 1, 2x2: 3, 3x3: 6
    const int nq = ir->GetNPoints();

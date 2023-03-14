@@ -12,9 +12,9 @@
 #ifndef MFEM_CEED_ALGEBRAIC_HPP
 #define MFEM_CEED_ALGEBRAIC_HPP
 
+#include "../../../linalg/sparsemat.hpp"
 #include "../../fespacehierarchy.hpp"
 #include "../../multigrid.hpp"
-#include "../interface/operator.hpp"
 #include "../interface/ceed.hpp"
 
 namespace mfem

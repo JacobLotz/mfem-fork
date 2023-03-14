@@ -11,9 +11,9 @@
 
 #include "full-assembly.hpp"
 
-#include "../../../linalg/sparsemat.hpp"
-#include "../interface/util.hpp"
-#include "../interface/ceed.hpp"
+#ifdef MFEM_USE_CEED
+#include <ceed/backend.h>
+#endif
 
 #ifdef MFEM_USE_CEED
 
