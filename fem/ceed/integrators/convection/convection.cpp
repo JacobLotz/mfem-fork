@@ -61,9 +61,7 @@ struct ConvectionOperatorInfo : public OperatorInfo
       apply_qf_mf_quad = &f_apply_conv_mf_quad;
       trial_op = EvalMode::Grad;
       test_op = EvalMode::Interp;
-      // For some reason, testing on macOS, using just ctx.dim will
-      // lead to wrong answers from the operator
-      qdatasize = ctx.dim + 1;
+      qdatasize = ctx.dim;
    }
 };
 #endif
