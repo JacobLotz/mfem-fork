@@ -22,6 +22,49 @@ namespace mfem
 namespace internal
 {
 
+MFEM_HOST_DEVICE inline
+void PAMassApply1D_Element(const int e,
+                           const int NE,
+                           const double *b_,
+                           const double *bt_,
+                           const double *d_,
+                           const double *x_,
+                           double *y_,
+                           const int d1d = 0,
+                           const int q1d = 0)
+{
+   const int D1D = d1d;
+   const int Q1D = q1d;
+   auto B = ConstDeviceMatrix(b_, Q1D, D1D);
+   auto Bt = ConstDeviceMatrix(bt_, D1D, Q1D);
+   auto D = ConstDeviceMatrix(d_, Q1D, NE);
+   auto X = ConstDeviceMatrix(x_, D1D, NE);
+   auto Y = DeviceMatrix(y_, D1D, NE);
+
+   constexpr int max_Q1D = MAX_Q1D;
+   double XQ[max_Q1D];
+   for (int qx = 0; qx < Q1D; ++qx)
+   {
+      XQ[qx] = 0.0;
+   }
+   for (int dx = 0; dx < D1D; ++dx)
+   {
+      const double s = X(dx,e);
+      for (int qx = 0; qx < Q1D; ++qx)
+      {
+         XQ[qx] += B(qx,dx)*s;
+      }
+   }
+   for (int qx = 0; qx < Q1D; ++qx)
+   {
+      const double q = XQ[qx]*D(qx,e);
+      for (int dx = 0; dx < D1D; ++dx)
+      {
+         Y(dx,e) += Bt(dx,qx) * q;
+      }
+   }
+}
+
 template <bool ACCUMULATE = true>
 MFEM_HOST_DEVICE inline
 void PAMassApply2D_Element(const int e,
@@ -719,6 +762,30 @@ void OccaPAMassApply3D(const int D1D,
 }
 #endif // MFEM_USE_OCCA
 
+static void PAMassApply1D(const int NE,
+                          const Array<double> &b_,
+                          const Array<double> &bt_,
+                          const Vector &d_,
+                          const Vector &x_,
+                          Vector &y_,
+                          const int d1d = 0,
+                          const int q1d = 0)
+{
+   MFEM_VERIFY(d1d <= MAX_D1D, "");
+   MFEM_VERIFY(q1d <= MAX_Q1D, "");
+
+   const auto B = b_.Read();
+   const auto Bt = bt_.Read();
+   const auto D = d_.Read();
+   const auto X = x_.Read();
+   auto Y = y_.ReadWrite();
+
+   MFEM_FORALL(e, NE,
+   {
+      internal::PAMassApply1D_Element(e, NE, B, Bt, D, X, Y, d1d, q1d);
+   });
+}
+
 template<int T_D1D = 0, int T_Q1D = 0>
 MFEM_HOST_DEVICE inline
 void PAMassApply2D(const int NE,
@@ -855,7 +922,11 @@ void PAMassApply(const int dim,
 #endif // MFEM_USE_OCCA
    const int id = (D1D << 4) | Q1D;
 
-   if (dim == 2)
+   if (dim == 1)
+   {
+      return PAMassApply1D(NE,B,Bt,D,X,Y,D1D,Q1D);
+   }
+   else if (dim == 2)
    {
       switch (id)
       {

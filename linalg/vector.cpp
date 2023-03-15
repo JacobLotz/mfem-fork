@@ -602,7 +602,7 @@ void Vector::SetSubVector(const Array<int> &dofs, const double value)
 
 void Vector::SetSubVector(const Array<int> &dofs, const Vector &elemvect)
 {
-   MFEM_ASSERT(dofs.Size() == elemvect.Size(),
+   MFEM_ASSERT(dofs.Size() <= elemvect.Size(),
                "Size mismatch: length of dofs is " << dofs.Size()
                << ", length of elemvect is " << elemvect.Size());
 
@@ -647,7 +647,7 @@ void Vector::SetSubVector(const Array<int> &dofs, double *elem_data)
 
 void Vector::AddElementVector(const Array<int> &dofs, const Vector &elemvect)
 {
-   MFEM_ASSERT(dofs.Size() == elemvect.Size(), "Size mismatch: "
+   MFEM_ASSERT(dofs.Size() <= elemvect.Size(), "Size mismatch: "
                "length of dofs is " << dofs.Size() <<
                ", length of elemvect is " << elemvect.Size());
 
@@ -691,7 +691,7 @@ void Vector::AddElementVector(const Array<int> &dofs, double *elem_data)
 void Vector::AddElementVector(const Array<int> &dofs, const double a,
                               const Vector &elemvect)
 {
-   MFEM_ASSERT(dofs.Size() == elemvect.Size(), "Size mismatch: "
+   MFEM_ASSERT(dofs.Size() <= elemvect.Size(), "Size mismatch: "
                "length of dofs is " << dofs.Size() <<
                ", length of elemvect is " << elemvect.Size());
 

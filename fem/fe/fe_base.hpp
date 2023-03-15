@@ -576,6 +576,13 @@ public:
    virtual const DofToQuad &GetDofToQuad(const IntegrationRule &ir,
                                          DofToQuad::Mode mode) const;
 
+   /** @brief Return the mapping from lexicographic DOF ordering to DOFs on
+       local face @a face_id. */
+   /** Given the @a ith DOF (lexicographically order) on the face referenced by
+       @a face_id, face_map[i] gives the corresponding index of the DOF in the
+       element (also lexicographically ordered). */
+   virtual void GetFaceMap(const int face_id, Array<int> &face_map) const;
+
    /// Deconstruct the FiniteElement
    virtual ~FiniteElement();
 
@@ -1154,7 +1161,7 @@ public:
    ~Poly_1D();
 };
 
-extern Poly_1D poly1d;
+extern MFEM_EXPORT Poly_1D poly1d;
 
 /// An element defined as an ND tensor product of 1D elements on a segment,
 /// square, or cube
@@ -1248,6 +1255,8 @@ public:
          NodalFiniteElement::GetTransferMatrix(fe, Trans, I);
       }
    }
+
+   virtual void GetFaceMap(const int face_id, Array<int> &face_map) const override;
 };
 
 class VectorTensorFiniteElement : public VectorFiniteElement,

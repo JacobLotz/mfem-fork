@@ -40,6 +40,7 @@ set(SRCS
   integ/bilininteg_vectorfediv_pa.cpp
   integ/bilininteg_vectorfemass_pa.cpp
   integ/lininteg_boundary.cpp
+  integ/lininteg_boundary_flux.cpp
   integ/lininteg_domain.cpp
   integ/lininteg_domain_grad.cpp
   integ/nonlininteg_vecconvection_pa.cpp
@@ -53,6 +54,7 @@ set(SRCS
   eltrans.cpp
   estimators.cpp
   fe.cpp
+  fe/face_map_utils.cpp
   fe/fe_base.cpp
   fe/fe_fixed_order.cpp
   fe/fe_h1.cpp
@@ -159,6 +161,7 @@ set(HDRS
   eltrans.hpp
   estimators.hpp
   fe.hpp
+  fe/face_map_utils.hpp
   fe/fe_base.hpp
   fe/fe_fixed_order.hpp
   fe/fe_h1.hpp
