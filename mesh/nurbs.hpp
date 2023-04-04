@@ -67,6 +67,15 @@ public:
    void CalcD2Shape(Vector &grad2, int i, double xi) const
    { CalcDnShape(grad2, 2, i, xi); }
 
+   /** Gives the locations of the maxima of the knotvector in reference space. The
+      function gives the knotspan @a ks, the coordinate in the knotspan @a xi
+      and the coordinate of the maximum in parameter space @a u */
+   void FindMaxima(Array<int> &ks, Vector &xi, Vector &u);
+   /** Global curve interpolation through the points @a x. @a x is an array with the
+      length of the spatial dimension containing vectors with spatial coordinates. The
+      controlpoints of the interpolated curve are given in @a x in the same form.*/
+   void FindInterpolant(Array<Vector*> &x);
+
    void Difference(const KnotVector &kv, Vector &diff) const;
    void UniformRefinement(Vector &newknots) const;
    /** Return a new KnotVector with elevated degree by repeating the endpoints
@@ -150,11 +159,20 @@ public:
    inline       double &operator()(int i, int j, int k, int l);
    inline const double &operator()(int i, int j, int k, int l) const;
 
+   static void Get2DRotationMatrix(double angle,
+                                   DenseMatrix &T);
    static void Get3DRotationMatrix(double n[], double angle, double r,
                                    DenseMatrix &T);
    void FlipDirection(int dir);
    void SwapDirections(int dir1, int dir2);
+
+   /// Rotate the NURBSPatch.
+   /** A rotation of a 2D NURBS-patch requires an angle only. Rotating
+       a 3D NURBS-patch requires a normal as well.*/
+   void Rotate(double angle, double normal[]= NULL);
+   void Rotate2D(double angle);
    void Rotate3D(double normal[], double angle);
+
    int MakeUniformDegree(int degree = -1);
    /// @note The returned object should be deleted by the caller.
    friend NURBSPatch *Interpolate(NURBSPatch &p1, NURBSPatch &p2);
@@ -196,7 +214,10 @@ protected:
    Mesh *patchTopo;
    int own_topo;
    Array<int> edge_to_knot;
+   // Set of knotvectors only containing unique knotvectors
    Array<KnotVector *> knotVectors;
+   // Extended set of knotvectors
+   Array<KnotVector *> knotVectorsExt;
    Vector weights;
 
    // periodic BC info:
@@ -238,6 +259,20 @@ protected:
 
    void CheckPatches();
    void CheckBdrPatches();
+
+   /** Checks the direction of the knotvectors in the patch based on
+       the patch orientation for patch @a p returns the direction of
+       the Knotvectors in @a kvdir.*/
+   void CheckKVDirection(int p, Array <int> &kvdir);
+   /**  Creates the extended array of KnotVectors */
+   void CreateExtendedKV();
+   /**  Updates the unique set of KnotVectors */
+   void UpdateUniqueKV();
+
+   /** Checks if the extended array of KnotVectors agrees with
+       the reduced set of KnotVectors. Returns false if it finds
+       a difference. */
+   bool InconsistentUniqueKVExtendedKV();
 
    void GetPatchKnotVectors   (int p, Array<KnotVector *> &kv);
    void GetPatchKnotVectors   (int p, Array<const KnotVector *> &kv) const;
