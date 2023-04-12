@@ -76,6 +76,10 @@ public:
       controlpoints of the interpolated curve are given in @a x in the same form.*/
    void FindInterpolant(Array<Vector*> &x);
 
+   /**
+      */
+   void GetInternalKnots(Vector &InternalKnots);
+
    void Difference(const KnotVector &kv, Vector &diff) const;
    void UniformRefinement(Vector &newknots) const;
    /** Return a new KnotVector with elevated degree by repeating the endpoints

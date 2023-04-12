@@ -445,6 +445,21 @@ void KnotVector::FindInterpolant(Array<Vector*> &x)
    }
 }
 
+void KnotVector::GetInternalKnots(Vector &InternalKnots)
+{
+   int okv = GetOrder();
+   int skv = Size();
+
+   InternalKnots.SetSize(skv - 2 * (okv + 1));
+   InternalKnots = 0.0;
+
+   int cnt = 0;
+   for(int i = okv + 1; i < skv - okv - 1; i++, cnt++)
+   {
+      InternalKnots[cnt] = knot[i];
+   }
+}
+
 int KnotVector::findKnotSpan(double u) const
 {
    int low, mid, high;
